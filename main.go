@@ -8,6 +8,8 @@ import (
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Server:", "go")
+
 	w.Write([]byte("hello from snipppet"))
 }
 func showSnippet(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +25,8 @@ func creatsnippetGET(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("creat a snipppet"))
 }
 func snippetCreatePost(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("add a new post"))
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("save a new snippet"))
 }
 func main() {
 	mux := http.NewServeMux()
