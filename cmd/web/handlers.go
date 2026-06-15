@@ -5,12 +5,22 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+
 	"snippetbox-m0ta-b1lla/internal/models"
 	"strconv"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go")
+
+	//snippets, err := app.snippets.Latest()
+	//if err != nil {
+	//	app.serverError(w, r, err)
+	//}
+	//for _, s := range snippets {
+	//	fmt.Fprintf(w, "%+v", s)
+	//}
+
 	files := []string{
 		"./ui/html/pages/home.tmpl",
 		"./ui/html/base.tmpl",
@@ -39,8 +49,18 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		} else {
 			app.serverError(w, r, err)
 		}
+		return
 	}
-	fmt.Fprintf(w, "%+v", snippet)
+	files := []string{"./ui/html/base.tmpl",
+		"./ui/html/partials/nav.tmpl",
+		"./ui/html/pages/view.tmpl",
+	}
+
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+	err = ts.ExecuteTemplate(w, "base", snippet)
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
