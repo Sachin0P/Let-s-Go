@@ -60,11 +60,14 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, r, err)
 	}
-	err = ts.ExecuteTemplate(w, "base", snippet)
+	data := templateData{
+		Snippet: snippet,
+	}
+	err = ts.ExecuteTemplate(w, "base", data)
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display a form for creating a new snippet..."))
+	w.Write([]byte("Display a form for creating a new Snippet..."))
 }
 
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
@@ -75,5 +78,5 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		app.serverError(w, r, err)
 	}
-	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/Snippet/view/%d", id), http.StatusSeeOther)
 }
