@@ -13,10 +13,10 @@ import (
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go")
 
-	//snippets, err := app.snippets.Latest()
-	//if err != nil {
-	//	app.serverError(w, r, err)
-	//}
+	snippets, err := app.snippets.Latest()
+	if err != nil {
+		app.serverError(w, r, err)
+	}
 	//for _, s := range snippets {
 	//	fmt.Fprintf(w, "%+v", s)
 	//}
@@ -26,11 +26,15 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/base.tmpl",
 		"./ui/html/partials/nav.tmpl",
 	}
+
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, r, err)
 	}
-	err = ts.ExecuteTemplate(w, "base", nil)
+	data := templateData{
+		Snippets: snippets,
+	}
+	err = ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		app.serverError(w, r, err)
 	}
